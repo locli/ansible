@@ -8,8 +8,10 @@
 - hosts: "192.168.41.220"
   connection: ssh 
   gather_facts: yes
-  ansible_use: root
-  ansible_ssh_pass: dlfmsdkcla
+  become: true
+  vars:
+    ansible_use: root
+    ansible_ssh_pass: dlfmsdkcla
   Roles:
     - bastionAppInstall
 
