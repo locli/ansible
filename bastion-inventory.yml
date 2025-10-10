@@ -1,0 +1,32 @@
+---
+all:
+  vars:
+    vcenter_hostname: "10.0.10.211"
+    vcenter_username: "administrator@vsphere.local"
+    vcenter_password: "!Vbcjwps1!"
+    vcenter_datacenter: "Datacenter"
+    vcenter_datastore: "Datastore5"
+    vcenter_cluster: "first"
+    vcenter_network: "private"
+    vmfolder: "/Datacenter/vm/first/automations"
+    vm_name: "bastion"
+    redhat_id: "ihd@futuregen.co.kr"
+    redhat_pw: "Dlatjstod12"
+    template: rheltemplate
+#### bastion create ####
+bastion:
+  hosts:
+    192.168.3.101:
+      passwd: "dlfmsdkcla"
+      interface: "ethernet-0"
+      ipadress: "192.168.41.220"
+      macaddress: "00:50:56:9f:76:20"
+      memory: 8192
+      cpu: 2
+      disk_size: 500
+#### bastion config ####
+      registry: 1
+      repository: 1
+      swl4: 0
+      ocpcli: 1 
+      enableUUID: 1
