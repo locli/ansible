@@ -10,8 +10,6 @@ all:
     vcenter_network: "private"
     vmfolder: "/Datacenter/vm/first/automations"
     vm_name: "bastion"
-    redhat_id: "ihd@futuregen.co.kr"
-    redhat_pw: "Dlatjstod12"
     template: rheltemplate
 #### bastion create ####
 bastion:
