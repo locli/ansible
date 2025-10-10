@@ -12,6 +12,6 @@
   vars:
     ansible_use: root
     ansible_ssh_pass: dlfmsdkcla
-  Roles:
+  roles:
     - bastionAppInstall
 
