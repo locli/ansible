@@ -11,21 +11,22 @@ all:
     vmfolder: "/Datacenter/vm/first/automations"
     vm_name: "A-bastion"
     template: rheltemplate
+
 #### bastion create ####
-#bastion:
-#  hosts:
-#    192.168.41.220:
-#      user: "root"
-#      passwd: "dlfmsdkcla"
-#      interface: "ethernet-0"
-#      ipadress: "192.168.41.220"
-#      macaddress: "00:50:56:9f:76:20"
-#      memory: 8192
-#      cpu: 2
-#      disk_size: 500
+bastion:
+  hosts:
+    192.168.41.220:
+      user: "root"
+      passwd: "dlfmsdkcla"
+      interface: "ethernet-0"
+      ipadress: "192.168.41.220"
+      macaddress: "00:50:56:9f:76:20"
+      memory: 8192
+      cpu: 2
+      disk_size: 500
 #### bastion config ####
-#      registry: 1
-#      repository: 1
-#      swl4: 0
-#      ocpcli: 1 
-#      enableUUID: 1
+      registry: 1
+      repository: 1
+      swl4: 0
+      ocpcli: 1 
+      enableUUID: 1
