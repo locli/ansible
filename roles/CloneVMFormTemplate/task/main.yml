@@ -2,7 +2,7 @@
 - name: clone vm from template 
   vmware_guest:
     hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_user }}"
+    username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: no
     datacenter: "{{ vcenter_datacenter }}"
@@ -20,3 +20,20 @@
         type: thin
         datastore: "{{ datastore }}"
     state: poweredoff
+
+- name: print
+  ansible.builtin.debug:
+  msg: "{{ vcenter_hostname }}"
+  msg: "{{ vcenter_username }}"
+  msg: "{{ vcenter_password }}"
+  msg: "{{ vcenter_hostname }}"
+  msg: "{{ vcenter_datacenter }}"
+  msg: "{{ vcenter_cluster }}"
+  msg: "{{ vmfoolder }}"
+  msg: "{{ vm_name|upper }}"
+  msg: "{{ vcenter_network }}"
+  msg: "{{ template }}"
+  msg: "{{ cpu }}"
+  msg: "{{ memory }}"
+  msg: "{{ disk }}"
+  msg: "{{ datastore }}"
