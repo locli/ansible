@@ -9,7 +9,7 @@ all:
     vcenter_cluster: "first"
     vcenter_network: "private"
     vmfolder: "/Datacenter/vm/first/automations"
-    vm_name: "bastion"
+    vm_name: "A-bastion"
     template: rheltemplate
 #### bastion create ####
 bastion:
