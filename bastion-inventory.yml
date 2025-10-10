@@ -1,7 +1,7 @@
 ---
 all:
   vars:
-    vcenter_hostname: "10.0.10.211"
+    vcenter_hostname: "192.168.40.201"
     vcenter_username: "administrator@vsphere.local"
     vcenter_password: "!Vbcjwps1!"
     vcenter_datacenter: "Datacenter"
@@ -17,6 +17,7 @@ all:
 bastion:
   hosts:
     192.168.3.101:
+      user: "root"
       passwd: "dlfmsdkcla"
       interface: "ethernet-0"
       ipadress: "192.168.41.220"
