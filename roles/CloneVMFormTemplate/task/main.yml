@@ -23,17 +23,4 @@
 
 - name: print
   ansible.builtin.debug:
-  msg: "{{ vcenter_hostname }}"
-  msg: "{{ vcenter_username }}"
-  msg: "{{ vcenter_password }}"
-  msg: "{{ vcenter_hostname }}"
-  msg: "{{ vcenter_datacenter }}"
-  msg: "{{ vcenter_cluster }}"
-  msg: "{{ vmfoolder }}"
-  msg: "{{ vm_name|upper }}"
-  msg: "{{ vcenter_network }}"
-  msg: "{{ template }}"
-  msg: "{{ cpu }}"
-  msg: "{{ memory }}"
-  msg: "{{ disk }}"
-  msg: "{{ datastore }}"
+  msg: "{{ vcenter_hostname }}.....{{ vcenter_username }}.....{{ vcenter_password }}.....{{ vcenter_hostname }}.....{{ vcenter_datacenter }}.....{{ vcenter_cluster }}.....{{ vmfoolder }}.....{{ vm_name|upper }}.....{{ vcenter_network }}.....{{ template }}.....{{ cpu }}.....{{ memory }}.....{{ disk }}.....{{ datastore }}"
