@@ -1,0 +1,15 @@
+- hosts: localhost
+  connection: local 
+  gather_facts: no
+  roles:
+    - CloneVMFormTemplate
+    - bastionInitailConfig
+
+- hosts: "bastion"
+  connection: ssh 
+  gather_facts: yes
+  ansible_use: root
+  ansible_ssh_pass: dlfmsdkcla
+  Roles:
+    - bastionAppInstall
+

@@ -14,7 +14,7 @@ all:
 #### bastion create ####
 bastion:
   hosts:
-    192.168.3.101:
+    192.168.41.220:
       user: "root"
       passwd: "dlfmsdkcla"
       interface: "ethernet-0"
