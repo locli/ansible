@@ -9,24 +9,102 @@ all:
     vcenter_cluster: "first"
     vcenter_network: "private"
     vmfolder: "/Datacenter/vm/first/automations"
-    vm_name: "A-bastion"
-    template: rheltemplate
-
+    templateCoreOS: rhcos-4.19.10
+  children:
+    bastion:
+      hosts:
+        192.168.41.220:
+          enableUUID: 1
+          memory: 8192
+          cpu: 2
+          disk_size: 500
+          interface: "ethernet-0"
+          macaddress: "00:50:56:9f:76:20"
+          vm_name: "A-bastion"
+          template: rheltemplate
+    swl4:
+      hosts:
+        192.168.41.219:
+          enableUUID: 1
+          memory: 8192
+          cpu: 2
+          disk_size: 500
+          interface: "ethernet-0"
+          macaddress: "00:50:56:9f:76:19"
+          vm_name: "A-swl4"
+          template: rheltemplate          
+    bootstrap:
+      hosts:
+        192.168.41.227:
+          enableUUID: 1
+          memory: 16384
+          cpu: 4
+          disk_size: 120
+          interface: "ethernet-0"
+          macaddress: "00:50:56:9f:76:27"
+          vm_name: "A-bootstrap"
+          template:           
+    master:
+      hosts:
+        192.168.41.221:
+          enableUUID: 1
+          memory: 16384
+          cpu: 4
+          disk_size: 120
+          interface: "ethernet-0"
+          macaddress: "00:50:56:9f:76:21"
+        192.168.41.222:
+          enableUUID: 1
+          memory: 16384
+          cpu: 4
+          disk_size: 120
+          interface: "ethernet-0"
+          macaddress: "00:50:56:9f:76:22"
+        192.168.41.223:
+          enableUUID: 1
+          memory: 16384
+          cpu: 4
+          disk_size: 120
+          interface: "ethernet-0"
+          macaddress: "00:50:56:9f:76:23"
+    worker:
+      hosts:
+        192.168.41.224:
+          enableUUID: 1
+          memory: 16384
+          cpu: 4
+          disk_size: 200
+          interface: "ethernet-0"
+          macaddress: "00:50:56:9f:76:24"
+        192.168.41.225:
+          enableUUID: 1
+          memory: 16384
+          cpu: 4
+          disk_size: 200
+          interface: "ethernet-0"
+          macaddress: "00:50:56:9f:76:25"
+        192.168.41.226:
+          enableUUID: 1
+          memory: 16384
+          cpu: 4
+          disk_size: 200
+          interface: "ethernet-0"
+          macaddress: "00:50:56:9f:76:26"
 #### bastion create ####
-bastion:
-  hosts:
-    192.168.41.220:
-      user: "root"
-      passwd: "dlfmsdkcla"
-      interface: "ethernet-0"
-      ipadress: "192.168.41.220"
-      macaddress: "00:50:56:9f:76:20"
-      memory: 8192
-      cpu: 2
-      disk_size: 500
+#bastion:
+#  hosts:
+#    192.168.41.220:
+#      user: "root"
+#      passwd: "dlfmsdkcla"
+#      interface: "ethernet-0"
+#      ipadress: "192.168.41.220"
+#      macaddress: "00:50:56:9f:76:20"
+#      memory: 8192
+#      cpu: 2
+#      disk_size: 500
 #### bastion config ####
-      registry: 1
-      repository: 1
-      swl4: 0
-      ocpcli: 1 
-      enableUUID: 1
+#      registry: 1
+#      repository: 1
+#      swl4: 0
+#      ocpcli: 1 
+#      enableUUID: 1

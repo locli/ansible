@@ -1,8 +1,38 @@
+---
 - hosts: localhost
   connection: local 
   gather_facts: no
   roles:
-    - CloneVMFormTemplate
+    - templateCoreOS
+- hosts: bastion
+  connection: local 
+  gather_facts: no
+  roles:
+    - cronVmFromTemplate
+    - bastionInitailConfig
+- hosts: swl4
+  connection: local 
+  gather_facts: no
+  roles:
+    - cronVmFromTemplate   
+    - bastionInitailConfig     
+- hosts: bootstrap
+  connection: local 
+  gather_facts: no
+  roles:
+    - cronVmFromTemplate
+    - bastionInitailConfig
+- hosts: master
+  connection: local
+  gather_facts: no
+  roles: 
+    - cronVmFromTemplate
+    - bastionInitailConfig
+- hosts: worker
+  connection: local
+  gather_facts: no
+  roles:
+    - cronVmFromTemplate
     - bastionInitailConfig
 # - hosts: "192.168.41.220"
 #   connection: ssh 
