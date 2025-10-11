@@ -1,3 +1,4 @@
+---
 - name: download openshif-cli /root/src
   get_url: url=hhttps://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.19/latest/rhcos-4.19.10-x86_64-vmware.x86_64.ova dest=/root/src/rhcos-4.19.10-x86_64-vmware.x86_64.ova
 - name: deploy rhcos ova
