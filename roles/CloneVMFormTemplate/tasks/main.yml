@@ -20,7 +20,3 @@
         type: thin
         datastore: "{{ datastore }}"
     state: poweredoff
-
-- name: print
-  ansible.builtin.debug:
-  msg: "{{ vcenter_hostname }}.....{{ vcenter_username }}.....{{ vcenter_password }}.....{{ vcenter_hostname }}.....{{ vcenter_datacenter }}.....{{ vcenter_cluster }}.....{{ vmfoolder }}.....{{ vm_name|upper }}.....{{ vcenter_network }}.....{{ template }}.....{{ cpu }}.....{{ memory }}.....{{ disk }}.....{{ datastore }}"
