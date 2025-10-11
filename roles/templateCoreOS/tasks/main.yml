@@ -1,8 +1,19 @@
 ---
 - name: download openshif-cli /root/src
-  get_url: url=https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.19/latest/rhcos-4.19.10-x86_64-vmware.x86_64.ova dest=/root/src/rhcos-4.19.10-x86_64-vmware.x86_64.ova
+  ansible.builtin.get_url:
+    url: "https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.19/latest/rhcos-4.19.10-x86_64-vmware.x86_64.ova"
+    dest: "/root/src/rhcos-4.19.10-x86_64-vmware.x86_64.ova"
+    mode: "0644"
+
+- name: "Show OVA file download result"
+  ansible.builtin.debug:
+    msg:
+      - "✅ RHCOS OVA file downloaded"
+      - "URL: {{ download_result.url }}"
+      - "Path: {{ download_result.dest }}"
+    
 - name: deploy rhcos ova
-  vmwacommunity.vmware.vmware_deploy_ovf:
+  vcommunity.vmware.vmware_content_deploy_ovf_template:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_password }}"
@@ -13,5 +24,13 @@
     name: "{{ templateCoreOS }}"
     networks: "{u'VM Network':u'{{ vcenter_network }}'}"
     datastore: "{{ default_datastore }}"
-    ovf: /root/src/rhcos-4.19.10-x86_64-vmware.x86_64.ova
-    power_on: no
+    ovf_path: /root/src/rhcos-4.19.10-x86_64-vmware.x86_64.ova
+    power_on: false
+
+- name: "✅ Template Deployment Completed"
+  ansible.builtin.debug:
+    msg:
+      - "RHCOS Template '{{ templateCoreOS }}' successfully registered in vCenter."
+      - "Datacenter: {{ vcenter_datacenter }}"
+      - "Cluster: {{ vcenter_cluster }}"
+      - "Datastore: {{ vcenter_datastore }}"
