@@ -13,7 +13,7 @@
       - "Path: {{ download_result.dest }}"
     
 - name: deploy rhcos ova
-  vcommunity.vmware.vmware_content_deploy_ovf_template:
+  community.vmware.vmware_content_deploy_ovf_template:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_password }}"
