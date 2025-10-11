@@ -1,5 +1,5 @@
 ---
 - name: change macaddress for ip
-  shell: govc vm.network.change -vm="{{ vmname|upper}}" -net="{{vcenter_network}}" -net.address="{{macaddress}}" ethernet-0
+  shell: govc vm.network.change -vm="{{ vm_name|upper}}" -net="{{vcenter_network}}" -net.address="{{macaddress}}" ethernet-0
 - name: vm disk.enableUUID
   shell: govc vm.change -e="disk.enableUUID=1" -vm="{{vmfolder}}{{vmname|upper}}"
