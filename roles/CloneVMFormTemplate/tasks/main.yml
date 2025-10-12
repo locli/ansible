@@ -4,6 +4,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
+    datastore: "{{ datastore }}"
     validate_certs: no
     datacenter: "{{ vcenter_datacenter }}"
     cluster: "{{ vcenter_cluster }}"
@@ -15,8 +16,7 @@
     hardware:
       num_cpus: "{{ cpu }} "
       memory_mb: "{{ memory }}"
-      disk:
-        - size_gb: "{{ disk_size }}"
-          type: thin
-          datastore: "{{ datastore }}"
+    disk:
+      - size_gb: "{{ disk_size }}"
+        type: thin
     state: poweredoff
