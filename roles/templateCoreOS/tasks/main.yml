@@ -16,7 +16,7 @@
   when: download_result is defined
 
     
-- name: deploy rhcos ova
+- name: "deploy rhcos ova"
   community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
