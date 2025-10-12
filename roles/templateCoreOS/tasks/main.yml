@@ -27,7 +27,8 @@
     folder: "{{ vmfolder }}"
     name: "{{ templateCoreOS }}"
     template: "{{ templateCoreOS }}"   
-    networks: "{u'VM Network':u'{{ vcenter_network }}'}"
+    networks: 
+      - name:  "{{ vcenter_network }}"
     ovf_path: /root/src/rhcos-4.19.10-x86_64-vmware.x86_64.ova
     state: poweredoff
 
