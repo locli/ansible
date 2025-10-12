@@ -4,16 +4,20 @@
     url: "https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.19/latest/rhcos-4.19.10-x86_64-vmware.x86_64.ova"
     dest: "/root/src/rhcos-4.19.10-x86_64-vmware.x86_64.ova"
     mode: "0644"
+  register: download_result
+  ignore_errors: yes
 
 - name: "Show OVA file download result"
   ansible.builtin.debug:
     msg:
       - "✅ RHCOS OVA file downloaded"
-      - "URL: {{ download_result.url }}"
-      - "Path: {{ download_result.dest }}"
+      - "URL: {{ download_result.url | default('Download skipped or failed') }}"
+      - "Path: {{ download_result.dest | default('N/A') }}"
+  when: download_result is defined
+
     
 - name: deploy rhcos ova
-  community.vmware.vmware_content_deploy_ovf_template:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_password }}"
@@ -22,12 +26,12 @@
     cluster: "{{ vcenter_cluster }}"
     folder: "{{ vmfolder }}"
     name: "{{ templateCoreOS }}"
+    template: "{{ templateCoreOS }}"   
     networks: "{u'VM Network':u'{{ vcenter_network }}'}"
-    datastore: "{{ default_datastore }}"
     ovf_path: /root/src/rhcos-4.19.10-x86_64-vmware.x86_64.ova
-    power_on: false
+    state: poweredoff
 
-- name: "✅ Template Deployment Completed"
+- name: "Template Deployment Completed"
   ansible.builtin.debug:
     msg:
       - "RHCOS Template '{{ templateCoreOS }}' successfully registered in vCenter."
