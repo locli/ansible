@@ -5,7 +5,7 @@
     dest: "/root/src/rhcos-4.19.10-x86_64-vmware.x86_64.ova"
     mode: "0644"
   register: download_result
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: "Show OVA file download result"
   ansible.builtin.debug:
