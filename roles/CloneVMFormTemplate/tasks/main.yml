@@ -1,5 +1,5 @@
 ---
-- name: clone vm from template 
+- name: "clone vm from template" 
   community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -15,8 +15,8 @@
     hardware:
       num_cpus: "{{ cpu }} "
       memory_mb: "{{ memory }}"
-    disk:
-      - size_gb: "{{ disk }}"
-        type: thin
-        datastore: "{{ datastore }}"
+      disk:
+        - size_gb: "{{ disk_size }}"
+          type: thin
+          datastore: "{{ datastore }}"
     state: poweredoff
