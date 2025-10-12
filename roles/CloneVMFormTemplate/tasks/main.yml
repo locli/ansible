@@ -7,7 +7,7 @@
     validate_certs: no
     datacenter: "{{ vcenter_datacenter }}"
     cluster: "{{ vcenter_cluster }}"
-    folder: "{{ vmfoolder }}"
+    folder: "{{ vmfolder }}"
     name: "{{ vm_name|upper}}"
     networks:
     - name: "{{ vcenter_network }}"
