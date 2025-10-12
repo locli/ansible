@@ -1,0 +1,30 @@
+---
+all:
+  vars:
+    vcenter_hostname: "192.168.40.201"
+    vcenter_username: "administrator@vsphere.local"
+    vcenter_password: "!Vbcjwps1!"
+    vcenter_datacenter: "Datacenter"
+    vcenter_datastore: "Datastore5"
+    vcenter_cluster: "first"
+    vcenter_network: "private"
+    vmfolder: "/Datacenter/vm/automations/"
+    templateCoreOS: rhcos-4.19.10
+  children:
+    bastion:
+      hosts:
+        192.168.41.220:
+          user: "root"
+          passwd: "dlfmsdkcla"
+          ipadress: "192.168.41.220"
+          registry: 1
+          repository: 1
+          ocpcli: 1 
+    swl4:
+      hosts:
+        192.168.41.220:
+          user: "root"
+          passwd: "dlfmsdkcla"
+          ipadress: "192.168.41.219"
+          swl4: 1
+          
