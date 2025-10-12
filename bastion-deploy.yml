@@ -21,19 +21,16 @@
   gather_facts: no
   roles:
     - CloneVMFormTemplate
-    - bastionInitailConfig
 - hosts: master
   connection: local
   gather_facts: no
   roles: 
     - CloneVMFormTemplate
-    - bastionInitailConfig
 - hosts: worker
   connection: local
   gather_facts: no
   roles:
     - CloneVMFormTemplate
-    - bastionInitailConfig
 # - hosts: "192.168.41.220"
 #   connection: ssh 
 #   gather_facts: yes

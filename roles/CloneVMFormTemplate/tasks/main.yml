@@ -1,6 +1,6 @@
 ---
 - name: clone vm from template 
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
