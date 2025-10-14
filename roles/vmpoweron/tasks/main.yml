@@ -10,6 +10,17 @@
     state: poweredon
   delegate_to: localhost
   
+- name: Get VM info
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    datacenter: "{{ vcenter_datacenter }}"
+    name: "{{ vm_name }}"
+  register: vm_info
+  delegate_to: localhost
+
 - name: Show result
   debug:
     msg: "VM {{ vm_name }} power state is {{ vm_info.instance.hw_power_status }}"
