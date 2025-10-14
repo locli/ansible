@@ -9,3 +9,7 @@
     name: "{{ vm_name }}"
     state: poweredon
   delegate_to: localhost
+  
+- name: Show result
+  debug:
+    msg: "VM {{ vm_name }} power state is {{ vm_info.instance.hw_power_status }}"
