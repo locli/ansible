@@ -1,13 +1,5 @@
 ---
 # yum repoistory create
-- name: httpd install 
-  ansible.builtin.dnf:
-    name: httpd
-    state: present 
-
-- name: httpd start 
-  shell: systemctl start httpd && systemctl enable httpd
-
 - name: Create mount point
   file:
     path: /mnt/cdrom
@@ -117,6 +109,15 @@
   command: createrepo_c /var/www/html/repo/
   args:
     creates: "/var/www/html/repo/repodata"
+
+# HTTPD isntall
+- name: httpd install 
+  ansible.builtin.dnf:
+    name: httpd
+    state: present 
+
+- name: httpd start 
+  shell: systemctl start httpd && systemctl enable httpd
 
 # image registry
 - name: podman install 
