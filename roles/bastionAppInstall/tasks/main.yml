@@ -73,7 +73,7 @@
 
 - name: unarchive openshift-client file 
   unarchive:
-    src: "/root/src/openshift-client-linux-4.19.14.tar.gz"
+    src: "/root/src/openshift-client-linux.tar.gz"
     dest: "/root/src/"
     remote_src: True
   become: True 
