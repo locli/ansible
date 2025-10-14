@@ -92,10 +92,12 @@
   command: cp -a /root/src/oc /usr/bin/
 
 - name: kubernetes-client to local directory
-  command: cp -a /root/src/kubecltl /usr/bin/
+  command: cp -a /root/src/kubectl /usr/bin/
 
 - name: oc-mirror to local directory
   command: cp -a /root/src/oc-mirror /usr/bin/
+- name: oc-mirror to local directory
+  command: chmod 711 /usr/bin/oc-mirror
 
 # CD-Rom Copy
 - name: Mount CD-ROM
