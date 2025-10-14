@@ -15,14 +15,52 @@
 
 # CLI install
 - name: download openshift-installer /root/src
-  file: state=directory path=/root/src/
-  get_url: url=https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.19/openshift-install-linux-4.19.14.tar.gz dest=/root/src/openshift-install-linux-4.19.14.tar.gz
+  ansible.builtin.get_url:
+    url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.19/openshift-install-linux-4.19.14.tar.gz"
+    dest: "/root/src/openshift-install-linux-4.19.14.tar.gz"
+    mode: "0644"
+  register: download_result
+  ignore_errors: true
+
+- name: "Show openshift-installer /root/src"
+  ansible.builtin.debug:
+    msg:
+      - "openshift-installer file downloaded"
+      - "URL: {{ download_result.url | default('Download skipped or failed') }}"
+      - "Path: {{ download_result.dest | default('N/A') }}"
+  when: download_result is defined
   
 - name: download openshif-cli /root/src
-  get_url: url=https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.19/openshift-client-linux.tar.gz dest=/root/src/openshift-client-linux.tar.gz
+  ansible.builtin.get_url:
+    url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.19/openshift-client-linux.tar.gz"
+    dest: "/root/src/openshift-client-linux.tar.gz"
+    mode: "0644"
+  register: download_result
+  ignore_errors: true
 
-- name: download openshif-cli /root/src
-  get_url: url=https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.19/oc-mirror.tar.gz dest=/root/src/oc-mirror.tar.gz
+- name: "Show openshift-client /root/src"
+  ansible.builtin.debug:
+    msg:
+      - "openshift-client file downloaded"
+      - "URL: {{ download_result.url | default('Download skipped or failed') }}"
+      - "Path: {{ download_result.dest | default('N/A') }}"
+  when: download_result is defined
+
+- name: download openshif-mirror /root/src
+  ansible.builtin.get_url:
+    url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.19/oc-mirror.tar.gz"
+    dest: "/root/src/oc-mirror.tar.gz"
+    mode: "0644"
+  register: download_result
+  ignore_errors: true
+
+- name: "Show openshift-mirror /root/src"
+  ansible.builtin.debug:
+    msg:
+      - "openshift-mirror file downloaded"
+      - "URL: {{ download_result.url | default('Download skipped or failed') }}"
+      - "Path: {{ download_result.dest | default('N/A') }}"
+  when: download_result is defined
 
 - name: unarchive openshift-installer file 
   unarchive:
