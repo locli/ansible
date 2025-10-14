@@ -86,7 +86,7 @@
   become: True 
 
 - name: openshift-installer to local directory
-  command: cp -a /root/src/openshift-installer /usr/bin/
+  command: cp -a /root/src/openshift-install /usr/bin/
 
 - name: openshift-client to local directory
   command: cp -a /root/src/oc /usr/bin/
