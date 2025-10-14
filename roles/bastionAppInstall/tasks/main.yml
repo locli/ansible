@@ -1,5 +1,15 @@
 ---
 # yum repoistory create
+- name: Create working directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /mnt/cdrom
+    - /root/src
+    - /var/www/html/repo
+
 - name: Create mount point
   file:
     path: /mnt/cdrom
