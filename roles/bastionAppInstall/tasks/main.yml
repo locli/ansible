@@ -148,6 +148,31 @@
   args:
     creates: "/var/www/html/repo/repodata"
 
+- name: Create local repo file
+  ansible.builtin.copy:
+    dest: /etc/yum.repos.d/local.repo
+    content: |
+      [BaseOS]
+      name=BaseOS
+      baseurl=file:///mnt/cdrom/BaseOS
+      enabled=1
+      gpgcheck=0
+
+      [AppStream]
+      name=AppStream
+      baseurl=file:///mnt/cdrom/AppStream
+      enabled=1
+      gpgcheck=0
+
+- name: Clean and refresh repo cache
+  ansible.builtin.shell: |
+    dnf clean all
+    dnf repolist
+
+- name: Sleep 10 seconds after starting httpd
+  ansible.builtin.wait_for:
+    timeout: 10
+
 # HTTPD isntall
 - name: httpd install 
   ansible.builtin.dnf:
@@ -173,4 +198,4 @@
 
 - name: Task Completed
   debug:
-    msg: "✅ Bastion Initialization Completed Successfully"
+    msg: "Bastion Initialization Completed Successfully"
