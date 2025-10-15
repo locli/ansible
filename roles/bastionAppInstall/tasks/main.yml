@@ -130,6 +130,8 @@
     - /mnt/cdrom/AppStream/Packages/python3-createrepo_c-0.20.1-2.el9.x86_64.rpm
     - /mnt/cdrom/AppStream/Packages/createrepo_c-0.20.1-2.el9.x86_64.rpm
     state: present
+    disable_gpg_check: true
+
 
 - name: Copy CD-ROM contents to local directory
   command: cp -a /mnt/cdrom/. /var/www/html/repo/
