@@ -170,5 +170,5 @@
     timeout: 3
 
 - name: Task Completed
-    debug:
-      msg: "✅ Bastion Initialization Completed Successfully"
+  debug:
+    msg: "✅ Bastion Initialization Completed Successfully"
