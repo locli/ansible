@@ -100,10 +100,6 @@
   command: chmod 711 /usr/bin/oc-mirror
 
 # CD-Rom Copy
-
-- name: change macaddress for ip
-  shell: govc device.connect -vm "{{ vm_name|upper}}" cdrom-16000
-  
 - name: Mount CD-ROM
   mount:
     path: /mnt/cdrom
