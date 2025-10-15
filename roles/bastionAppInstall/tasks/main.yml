@@ -31,7 +31,11 @@
       - "URL: {{ download_result.url | default('Download skipped or failed') }}"
       - "Path: {{ download_result.dest | default('N/A') }}"
   when: download_result is defined
-  
+
+- name: Sleep 5 seconds before next download
+  ansible.builtin.wait_for:
+    timeout: 5
+
 - name: download openshif-cli /root/src
   ansible.builtin.get_url:
     url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.19/openshift-client-linux.tar.gz"
@@ -48,6 +52,10 @@
       - "Path: {{ download_result.dest | default('N/A') }}"
   when: download_result is defined
 
+- name: Sleep 5 seconds before next download
+  ansible.builtin.wait_for:
+    timeout: 5
+
 - name: download openshif-mirror /root/src
   ansible.builtin.get_url:
     url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-4.19/oc-mirror.tar.gz"
@@ -63,6 +71,10 @@
       - "URL: {{ download_result.url | default('Download skipped or failed') }}"
       - "Path: {{ download_result.dest | default('N/A') }}"
   when: download_result is defined
+
+- name: Sleep 5 seconds before next download
+  ansible.builtin.wait_for:
+    timeout: 5
 
 - name: unarchive openshift-installer file 
   unarchive:
@@ -107,10 +119,22 @@
     fstype: iso9660
     state: mounted
 
+- name: Sleep 10 seconds after mounting CD-ROM
+  ansible.builtin.wait_for:
+    timeout: 10
+
+- name: Install createrepo_c packages from AppStream
+  ansible.builtin.dnf:
+    name:
+    - /mnt/cdrom/AppStream/Packages/createrepo_c-libs-0.20.1-2.el9.x86_64.rpm
+    - /mnt/cdrom/AppStream/Packages/python3-createrepo_c-0.20.1-2.el9.x86_64.rpm
+    - /mnt/cdrom/AppStream/Packages/createrepo_c-0.20.1-2.el9.x86_64.rpm
+    state: present
+
 - name: Copy CD-ROM contents to local directory
   command: cp -a /mnt/cdrom/. /var/www/html/repo/
   args:
-    creates: /var/www/html/repo/
+    creates: /var/www/html/repo/.discinfo
 
 #- name: Unmount CD-ROM
 #  mount:
@@ -128,6 +152,10 @@
     name: httpd
     state: present 
 
+- name: Sleep 3 seconds after starting httpd
+  ansible.builtin.wait_for:
+    timeout: 3
+
 - name: httpd start 
   shell: systemctl start httpd && systemctl enable httpd
 
@@ -137,3 +165,10 @@
     name: podman
     state: present 
 
+- name: Sleep 3 seconds after starting httpd
+  ansible.builtin.wait_for:
+    timeout: 3
+
+- name: Task Completed
+    debug:
+      msg: "✅ Bastion Initialization Completed Successfully"
