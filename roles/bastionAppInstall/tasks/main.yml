@@ -112,10 +112,10 @@
   args:
     creates: /var/www/html/repo/
 
-- name: Unmount CD-ROM
-  mount:
-    path: /mnt/cdrom
-    state: unmounted
+#- name: Unmount CD-ROM
+#  mount:
+#    path: /mnt/cdrom
+#    state: unmounted
 
 - name: Generate repository metadata
   command: createrepo_c /var/www/html/repo/
