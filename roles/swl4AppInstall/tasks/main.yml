@@ -104,6 +104,9 @@
     setype: etc_t
   notify: Restart haproxy Service
 
+- name: LF error fix
+  shell: echo '' >> /etc/haproxy/haproxy.cfg
+
 - name: Enable SELinux boolean for HAProxy connections
   ansible.posix.seboolean:
     name: haproxy_connect_any
