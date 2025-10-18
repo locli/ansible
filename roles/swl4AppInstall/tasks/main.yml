@@ -104,12 +104,20 @@
     setype: etc_t
   notify: Restart haproxy Service
 
-- name: Enable haproxy_connect_any
+- name: Enable SELinux boolean for HAProxy connections
   ansible.posix.seboolean:
     name: haproxy_connect_any
-    persistent: true
     state: true
+    persistent: true
     ignore_selinux_state: true
+
+- name: Verify SELinux boolean status
+  ansible.builtin.command: getsebool haproxy_connect_any
+  register: sebool_status
+  changed_when: false
+
+- debug:
+    msg: "SELinux boolean haproxy_connect_any is now: {{ sebool_status.stdout }}"
 
 - name: Enable proxied ports in firewall
   ansible.posix.firewalld:
