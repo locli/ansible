@@ -1,0 +1,139 @@
+---
+# yum repoistory create
+- name: Create working directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /mnt/cdrom
+    - /root/src
+    - /var/www/html/repo
+
+- name: Create mount point
+  file:
+    path: /mnt/cdrom
+    state: directory
+ 
+# CD-Rom Copy
+- name: Mount CD-ROM
+  mount:
+    path: /mnt/cdrom
+    src: /dev/cdrom
+    fstype: iso9660
+    state: mounted
+
+- name: Sleep 10 seconds after mounting CD-ROM
+  ansible.builtin.wait_for:
+    timeout: 10
+
+- name: Install createrepo_c packages from AppStream
+  ansible.builtin.dnf:
+    name:
+    - /mnt/cdrom/AppStream/Packages/createrepo_c-libs-0.20.1-2.el9.x86_64.rpm
+    - /mnt/cdrom/AppStream/Packages/python3-createrepo_c-0.20.1-2.el9.x86_64.rpm
+    - /mnt/cdrom/AppStream/Packages/createrepo_c-0.20.1-2.el9.x86_64.rpm
+    state: present
+    disable_gpg_check: true
+
+
+- name: Copy CD-ROM contents to local directory
+  ansible.builtin.copy:
+    src: /mnt/cdrom/
+    dest: /var/www/html/repo/
+    remote_src: true
+    owner: root
+    group: root
+    mode: preserve
+
+#- name: Unmount CD-ROM
+#  mount:
+#    path: /mnt/cdrom
+#    state: unmounted
+
+- name: Generate repository metadata
+  command: createrepo_c /var/www/html/repo/
+  args:
+    creates: "/var/www/html/repo/repodata"
+
+- name: Create local repo file
+  ansible.builtin.copy:
+    dest: /etc/yum.repos.d/local.repo
+    content: |
+      [BaseOS]
+      name=BaseOS
+      baseurl=file:///mnt/cdrom/BaseOS
+      enabled=1
+      gpgcheck=0
+
+      [AppStream]
+      name=AppStream
+      baseurl=file:///mnt/cdrom/AppStream
+      enabled=1
+      gpgcheck=0
+
+- name: Clean and refresh repo cache
+  ansible.builtin.shell: |
+    dnf clean all
+    dnf repolist
+
+- name: Sleep 10 seconds after starting httpd
+  ansible.builtin.wait_for:
+    timeout: 10
+
+# haproxy isntall
+- name: haproxy install 
+  ansible.builtin.dnf:
+    name: 
+      - haproxy
+      - python3-libsemanage
+      - python3-libselinux
+    state: present 
+
+- name: Sleep 3 seconds after starting haproxy
+  ansible.builtin.wait_for:
+    timeout: 3
+
+- name: Copy haproxy.cfg Template
+  ansible.builtin.template:
+    src: templates/haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    group: root
+    mode: "0644"
+    owner: root
+    setype: etc_t
+  notify: Restart haproxy Service
+
+- name: Enable haproxy_connect_any
+  ansible.posix.seboolean:
+    name: haproxy_connect_any
+    persistent: true
+    state: true
+    ignore_selinux_state: true
+
+- name: Enable proxied ports in firewall
+  ansible.posix.firewalld:
+    immediate: true
+    permanent: true
+    port: "{{ item }}"
+    state: enabled
+  loop:
+    - 80/tcp
+    - 8080/tcp
+    - 53/tcp
+    - 53/udp
+    - 443/tcp
+    - 6443/tcp
+    - 9000/tcp
+    - 22623/tcp
+
+- name: haproxy start 
+  shell: systemctl start haproxy && systemctl enable haproxy
+
+- name: Sleep 3 seconds after starting httpd
+  ansible.builtin.wait_for:
+    timeout: 3
+
+- name: Task Completed
+  debug:
+    msg: "Bastion Initialization Completed Successfully"

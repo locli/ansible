@@ -1,0 +1,17 @@
+---
+- hosts: swl4
+  connection: local 
+  gather_facts: no
+  vars:
+    vm_name: "A-SWL4"
+  roles:
+    - vmpoweron
+- hosts: "192.168.41.219"
+  connection: ssh 
+  gather_facts: yes
+  become: true
+  vars:
+    ansible_use: root
+    ansible_ssh_pass: dlfmsdkcla
+  roles:
+    - swl4AppInstall
