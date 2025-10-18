@@ -1,0 +1,17 @@
+---
+- hosts: bastion
+  connection: local 
+  gather_facts: no
+  vars:
+    vm_name: "A-BASTION"
+  roles:
+    - vmpoweron
+- hosts: "192.168.41.220"
+  connection: ssh 
+  gather_facts: yes
+  become: true
+  vars:
+    ansible_use: root
+    ansible_ssh_pass: dlfmsdkcla
+  roles:
+    - bastionAppInstall

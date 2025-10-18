@@ -10,7 +10,7 @@
 - name: "Show OVA file download result"
   ansible.builtin.debug:
     msg:
-      - "✅ RHCOS OVA file downloaded"
+      - "RHCOS OVA file downloaded"
       - "URL: {{ download_result.url | default('Download skipped or failed') }}"
       - "Path: {{ download_result.dest | default('N/A') }}"
   when: download_result is defined
