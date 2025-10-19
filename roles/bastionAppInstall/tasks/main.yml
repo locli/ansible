@@ -1,4 +1,31 @@
 ---
+- name: Disable SELinux (current runtime)
+  ansible.builtin.shell: |
+    if [ "$(getenforce)" != "Disabled" ]; then
+      setenforce 0
+    fi
+  ignore_errors: true
+
+- name: Disable SELinux permanently
+  ansible.builtin.replace:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    replace: 'SELINUX=disabled'
+
+- name: Verify SELinux configuration file
+  ansible.builtin.shell: grep SELINUX= /etc/selinux/config
+  register: selinux_config
+
+- name: Show current SELinux runtime mode
+  ansible.builtin.command: getenforce
+  register: selinux_status
+  changed_when: false
+
+- debug:
+    msg:
+      - "SELinux config: {{ selinux_config.stdout }}"
+      - "Current runtime mode: {{ selinux_status.stdout }}"
+
 # yum repoistory create
 - name: Create working directories
   file:
