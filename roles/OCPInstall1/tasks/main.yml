@@ -36,7 +36,7 @@
 
 - name: Set public key fact
   ansible.builtin.set_fact:
-    ssh_pubkey: "{{ ssh_pub_slurp.content | trim }}"
+    ssh_pubkey: "{{ (ssh_pub_slurp.content | b64decode).splitlines()[0] | trim }}"
 
 - name: Show generated public key
   ansible.builtin.debug:
