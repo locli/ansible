@@ -84,14 +84,14 @@
 
 ### manafests Create & modify ###
 - name: create manafests
-  shell: openshift-install create manifests --dir ./install_dir
+  shell: openshift-install create manifests --dir /root/install_dir
 
 - name: master scheduler disabled
   shell: "perl -pi -e 's/mastersSchedulable: true/mastersSchedulable: false/' ./install_dir/manifests/cluster-scheduler-02-config.yml"
 
 ### ignition Create ###
 - name: create ignition
-  shell: openshift-install create ignition-configs --dir /root/install_dir
+  shell: cd /root/install_dir && openshift-install create ignition-configs --dir /root/install_dir
 
 - name: "append bootstrap ignition"
   copy:
