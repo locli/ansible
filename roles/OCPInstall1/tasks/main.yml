@@ -1,0 +1,134 @@
+---
+### Directory create ###
+- name: Create working directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - /root/install_dir
+
+### ssh key ####
+- name: Ensure .ssh directory exists
+  file:
+    path: ~/.ssh
+    state: directory
+    mode: '0700' 
+
+- name: Generate SSH key pair if not present
+  community.crypto.openssh_keypair:
+    path: ~/.ssh/id_rsa
+    type: rsa
+    size: 4096
+    state: present
+    comment: "root@bastion"
+  register: ssh_key
+
+- name: Show generated public key
+  debug:
+    msg: "{{ ssh_key.public_key }}"
+
+- name: Read file content into variable
+  ansible.builtin.set_fact:
+    myfile_content: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+
+- debug:
+    msg: "File content: {{ myfile_content }}"
+
+### install-Config ####
+- name: Ensures ./install_dir dir exists
+  file: path=./install_dir state=directory
+
+- name: "create ./install_dir/install-config.yaml "
+  copy:
+    dest: ./install_dir/install-config.yaml 
+    content: |
+      apiVersion: v1
+      baseDomain: "{{ baseDomain }}"
+      compute:
+      - hyperthreading: Enabled
+        name: worker
+        replicas: 0
+      controlPlane:
+        hyperthreading: Enabled
+        name: master
+        replicas: 3
+      metadata:
+        name: "{{ clusterName }}"
+      networking:
+        clusterNetwork:
+        - cidr: "{{ clusterCIRD }}"
+          hostPrefix: {{ hostPrefix }}
+        networkType: OpenShiftSDN
+        serviceNetwork:
+        - "{{ serviceNetwork }}"
+      platform:
+        vsphere:
+          vcenter: "{{ vcenter_hostname }}"
+          username: "{{ vcenter_user }}"
+          password: "{{ vcenter_password }}"
+          datacenter: "{{ vcenter_datacenter }}"
+          defaultDatastore: "{{ default_datastore }}"
+          folder: "{{ vmfoolder }}"
+          diskType: thin
+      fips: false
+      pullSecret: '{{ PullSecret }}'
+      sshKey: "{{ sshkeys }}"
+
+### manafests Create & modify ###
+- name: create manafests
+  shell: openshift-install create manifests --dir ./install_dir
+
+- name: master scheduler disabled
+  shell: "perl -pi -e 's/mastersSchedulable: true/mastersSchedulable: false/' ./install_dir/manifests/cluster-scheduler-02-config.yml"
+
+### ignition Create ###
+- name: create ignition
+  shell: openshift-install create ignition-configs --dir /root/install_dir
+
+- name: "append bootstrap ignition"
+  copy:
+    dest: /root/install_dir/append-bootstrap.ign
+    content: |
+      {
+        "ignition": {
+          "config": {
+            "merge": [
+              {
+                "source": "http://{{ httpServer }}/bootstrap.ign",
+                "verification": {}
+              }
+            ]
+          },
+          "timeouts": {},
+          "version": "3.2.0"
+        },
+        "networkd": {},
+        "passwd": {},
+        "storage": {},
+        "systemd": {}
+      }
+
+- name: move bootstrap.ign for web service 
+  shell: mv /root/install_dir/bootstrap.ign /var/www/html/
+
+- name: change perm and owner
+  shell : chmod 755 /var/www/html/bootstrap.ign ; chown apache.apache /var/www/html/bootstrap.ign
+
+- name: move append-bootstrap.ign for web service 
+  shell: mv /root/install_dir/append-bootstrap.ign /var/www/html/
+
+- name: change perm and owner
+  shell : chmod 755 /var/www/html/append-bootstrap.ign ; chown apache.apache /var/www/html/append-bootstrap.ign
+
+- name: move master.ign for web service 
+  shell: mv /root/install_dir/master.ign /var/www/html/
+
+- name: change perm and owner
+  shell : chmod 755 /var/www/html/master.ign ; chown apache.apache /var/www/html/master.ign
+
+- name: move worker.ign for web service 
+  shell: mv /root/install_dir/worker.ign /var/www/html/
+
+- name: change perm and owner
+  shell : chmod 755 /var/www/html/worker.ign ; chown apache.apache /var/www/html/worker.ign
