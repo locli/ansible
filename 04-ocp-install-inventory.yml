@@ -1,6 +1,7 @@
 ---
 all:
   vars:
+    httpServer: "192.168.41.220" 
     vcenter_hostname: "192.168.40.201"
     vcenter_username: "administrator@vsphere.local"
     vcenter_password: "!Vbcjwps1!"
