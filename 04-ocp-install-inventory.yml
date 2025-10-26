@@ -10,6 +10,14 @@ all:
     vcenter_network: "private"
     vmfolder: "/Datacenter/vm/automations/"
     templateCoreOS: rhcos-4.19.10
+    DNS1: 192.168.6.1
+    DNS2: 192.168.1.1
+    baseDomain: "test.fu.igotit.co.kr"
+    clusterName: "ocp"
+    clusterCIRD: 10.128.0.0/14
+    hostPrefix: 23
+    serviceNetwork: 172.30.0.0/16
+    PullSecret: '{"auths":{"cloud.openshift.com":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K29jbV9hY2Nlc3NfNDlkYjA2MzVjNjhmNDk5YTkyYzQ3MDlmMjA5NmFiNDM6Mk9JNVFGQ1QyVFhQTUpNTEU2WjFSMjZWNTBNQ08zS1lPWlZMNVdINUg5WjFJT0NMN0NaT0lUNzNNQVZaVktZUw==","email":"jaesuk.lee@futuregen.co.kr"},"quay.io":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K29jbV9hY2Nlc3NfNDlkYjA2MzVjNjhmNDk5YTkyYzQ3MDlmMjA5NmFiNDM6Mk9JNVFGQ1QyVFhQTUpNTEU2WjFSMjZWNTBNQ08zS1lPWlZMNVdINUg5WjFJT0NMN0NaT0lUNzNNQVZaVktZUw==","email":"jaesuk.lee@futuregen.co.kr"},"registry.connect.redhat.com":{"auth":"fHVoYy1wb29sLTVmOWM3NTAyLWIyOTYtNDdhNS1iY2E2LTM3ODAyMGE5NzEwNzpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSXdOalF3TkdFMFpXSTJOamcwTTJWallqSTBORGxoT0dRNFlUWTBPVGxoTmlKOS5XblpxLXhIbW15N2hSUVY1YlJTWFlaZWlWV1AzLS15bGJrT3llQjBKem85aEpHNDRaVWUxMWhlVjdwLW5qZ3lMeUdBTkQtNEdRQ1F1TmJDMFlwRXZKb2pNWnZWdFB0WWh3UWhFOTV6VUdlSzVlT2l6M1E3RmF2eGNWbUdPcUZoRU1VZXFySW9UZ3JjSFIzQzNJa1hPWnJ4bzZ1ZC1oUVpMdlpoZUJ6LXVETFJ5Sm9pOTVEWEpPbWQ0cDVxRGVrSGlUTG9zS3hwTGJONzYxRmRKcG03RzQzN01QQWNnRHQ4NkFvbE9yT2otX0tva19jUFhERTgtamc4SlhLYllzZjdobWxGMDZDMGZCRmZoalFqNjdWWVE2dEVMNDhFX1dtYmxoOU1WdzBvNWJSZkgtbmh4YmNQcUY0UTI2ZzY2My1uUlU5UU1OQ2ZpYTFibjNPLWk0OEtZMTNwNDdsYU50UjhrWXk0ejd3M2JZV3F4cWtKY3RISGxVcHBGVnJYSFlGUGd3emthbnRDSC03SkE5enB5eU0zQUcwVmM4Rlh3d3h1b0k4Y0ZvT245a3FsYTEtWjRUWktkejBXdXp0QTVwNHB5UWNKWkt6ODVXT00wWGQ1REFELUI3dlV4VGNyS0ZrN1F1T2U4YVhocjNjdGFtSnB4RWhKTmpNdXg4MTdTQXNTQy1JbnVlbmswc1lRQzFEaWQ5Z05UNVlrZGYzamJVUkZ3eUdXcHp2aVl5WWRJelMzdXVabU8zNDUtckxkbVRRUGdHM2EyOFFrV2Y3ZXFrUVkxR3kyV2VwUFZfZk9GSE9EeFUzNmN6ZUlOOWhtN29wZlYwZ1lxTmpGX2tjVTdrSlhyR0hxZVBxc19odktmeGJXY1otTXBRYTZLRnhEWDJMNWxXOUhwekxGUWlocw==","email":"jaesuk.lee@futuregen.co.kr"},"registry.redhat.io":{"auth":"fHVoYy1wb29sLTVmOWM3NTAyLWIyOTYtNDdhNS1iY2E2LTM3ODAyMGE5NzEwNzpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSXdOalF3TkdFMFpXSTJOamcwTTJWallqSTBORGxoT0dRNFlUWTBPVGxoTmlKOS5XblpxLXhIbW15N2hSUVY1YlJTWFlaZWlWV1AzLS15bGJrT3llQjBKem85aEpHNDRaVWUxMWhlVjdwLW5qZ3lMeUdBTkQtNEdRQ1F1TmJDMFlwRXZKb2pNWnZWdFB0WWh3UWhFOTV6VUdlSzVlT2l6M1E3RmF2eGNWbUdPcUZoRU1VZXFySW9UZ3JjSFIzQzNJa1hPWnJ4bzZ1ZC1oUVpMdlpoZUJ6LXVETFJ5Sm9pOTVEWEpPbWQ0cDVxRGVrSGlUTG9zS3hwTGJONzYxRmRKcG03RzQzN01QQWNnRHQ4NkFvbE9yT2otX0tva19jUFhERTgtamc4SlhLYllzZjdobWxGMDZDMGZCRmZoalFqNjdWWVE2dEVMNDhFX1dtYmxoOU1WdzBvNWJSZkgtbmh4YmNQcUY0UTI2ZzY2My1uUlU5UU1OQ2ZpYTFibjNPLWk0OEtZMTNwNDdsYU50UjhrWXk0ejd3M2JZV3F4cWtKY3RISGxVcHBGVnJYSFlGUGd3emthbnRDSC03SkE5enB5eU0zQUcwVmM4Rlh3d3h1b0k4Y0ZvT245a3FsYTEtWjRUWktkejBXdXp0QTVwNHB5UWNKWkt6ODVXT00wWGQ1REFELUI3dlV4VGNyS0ZrN1F1T2U4YVhocjNjdGFtSnB4RWhKTmpNdXg4MTdTQXNTQy1JbnVlbmswc1lRQzFEaWQ5Z05UNVlrZGYzamJVUkZ3eUdXcHp2aVl5WWRJelMzdXVabU8zNDUtckxkbVRRUGdHM2EyOFFrV2Y3ZXFrUVkxR3kyV2VwUFZfZk9GSE9EeFUzNmN6ZUlOOWhtN29wZlYwZ1lxTmpGX2tjVTdrSlhyR0hxZVBxc19odktmeGJXY1otTXBRYTZLRnhEWDJMNWxXOUhwekxGUWlocw==","email":"jaesuk.lee@futuregen.co.kr"},"bastion.ocp4.test.fu.igotit.co.kr":{"auth":"YWRtaW46ZGxmbXNka2NsYQ==","email":"jaesuk.lee@futuregen.co.kr"}}}'
   children:
     bastion:
       hosts:
@@ -17,14 +25,5 @@ all:
           user: "root"
           passwd: "dlfmsdkcla"
           ipadress: "192.168.41.220"
-          registry: 1
-          repository: 1
-          ocpcli: 1 
-    swl4:
-      hosts:
-        192.168.41.220:
-          user: "root"
-          passwd: "dlfmsdkcla"
-          ipadress: "192.168.41.219"
-          swl4: 1
+
           
