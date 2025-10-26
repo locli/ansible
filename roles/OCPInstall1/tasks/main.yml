@@ -66,7 +66,7 @@
         clusterNetwork:
         - cidr: "{{ clusterCIRD }}"
           hostPrefix: {{ hostPrefix }}
-        networkType: ovn-kubernetes
+        networkType: OVNKubernetes
         serviceNetwork:
         - "{{ serviceNetwork }}"
       platform:
