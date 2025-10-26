@@ -75,7 +75,7 @@
           username: "{{ vcenter_username }}"
           password: "{{ vcenter_password }}"
           datacenter: "{{ vcenter_datacenter }}"
-          defaultDatastore: "{{ vcenter_datastore }}"
+          defaultDatastore: "/Datacenter/datastore/{{ vcenter_datastore }}"
           folder: "{{ vmfolder }}"
           diskType: thin
       fips: false
