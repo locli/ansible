@@ -155,4 +155,7 @@
   shell: mv /root/install_dir/worker.ign /var/www/html/
 
 - name: change perm and owner
-  shell : chmod 755 /var/www/html/worker.ign ; chown apache.apache /var/www/html/worker.ign
+  shell: chmod 755 /var/www/html/worker.ign ; chown apache.apache /var/www/html/worker.ign
+
+- name: selinux change 
+  shell:  chcon -R -h -t httpd_sys_content_t /var/www/html/
