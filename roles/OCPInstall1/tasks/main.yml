@@ -47,7 +47,7 @@
   file: path=/root/install_dir state=directory
 
 - name: "create /root/install_dir/install-config.yaml "
-  copy:
+  ansible.builtin.copy:
     dest: /root/install_dir/install-config.yaml 
     content: |
       apiVersion: v1
@@ -66,17 +66,17 @@
         clusterNetwork:
         - cidr: "{{ clusterCIRD }}"
           hostPrefix: {{ hostPrefix }}
-        networkType: OpenShiftSDN
+        networkType: ovn-kubernetes
         serviceNetwork:
         - "{{ serviceNetwork }}"
       platform:
         vsphere:
           vcenter: "{{ vcenter_hostname }}"
-          username: "{{ vcenter_user }}"
+          username: "{{ vcenter_username }}"
           password: "{{ vcenter_password }}"
           datacenter: "{{ vcenter_datacenter }}"
-          defaultDatastore: "{{ default_datastore }}"
-          folder: "{{ vmfoolder }}"
+          defaultDatastore: "{{ vcenter_datastore }}"
+          folder: "{{ vmfolder }}"
           diskType: thin
       fips: false
       pullSecret: '{{ PullSecret }}'
