@@ -86,32 +86,32 @@ backend backend_6443
     mode tcp
     option tcplog
     balance source
-    server bootstrap 192.168.41.227:6443 check
-    server master0 192.168.41.221:6443 check
-    server master1 192.168.41.222:6443 check
-    server master2 192.168.41.223:6443 check
+    server bootstrap {{ bootstrap_ip }}:6443 check
+    {% for ip in master_ips %}
+    server master{{ loop.index0 }} {{ ip }}:6443 check
+    {% endfor %}
 
 backend backend_22623
     mode tcp
     option tcplog
     balance source
-    server bootstrap 192.168.41.227:22623 check
-    server master0 192.168.41.221:22623 check
-    server master1 192.168.41.222:22623 check
-    server master2 192.168.41.223:22623 check
+    server bootstrap {{ bootstrap_ip }}:22623 check
+    {% for ip in master_ips %}
+    server master{{ loop.index0 }} {{ ip }}:22623 check
+    {% endfor %}
 
 backend backend_443
     mode tcp
     option tcplog
     balance source
-    server worker0 192.168.41.221:443 check
-    server worker1 192.168.41.222:443 check
-    server worker2 192.168.41.223:443 check
+    {% for ip in worker_ips %}
+    server worker{{ loop.index0 }} {{ ip }}:443 check
+    {% endfor %}
 
 backend backend_80
     mode tcp
     option tcplog
     balance source
-    server worker0 192.168.41.221:80 check
-    server worker1 192.168.41.222:80 check
-    server worker2 192.168.41.223:80 check
+    {% for ip in worker_ips %}
+    server worker{{ loop.index0 }} {{ ip }}:80 check
+    {% endfor %}

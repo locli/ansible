@@ -4,7 +4,7 @@
   gather_facts: yes
   become: true
   vars:
-    ansible_use: root
+    ansible_user: root
     ansible_ssh_pass: dlfmsdkcla
   roles:
     - OCPInstall1
