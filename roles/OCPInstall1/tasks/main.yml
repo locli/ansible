@@ -52,6 +52,8 @@
     content: |
       apiVersion: v1
       baseDomain: "{{ baseDomain }}"
+      metadata:
+        name: "{{ clusterName }}"
       compute:
       - hyperthreading: Enabled
         name: worker
@@ -60,8 +62,6 @@
         hyperthreading: Enabled
         name: master
         replicas: 3
-      metadata:
-        name: "{{ clusterName }}"
       networking:
         clusterNetwork:
         - cidr: "{{ clusterCIRD }}"
@@ -71,15 +71,32 @@
         - "{{ serviceNetwork }}"
       platform:
         vsphere:
-          vcenter: "{{ vcenter_hostname }}"
-          username: "{{ vcenter_username }}"
-          password: "{{ vcenter_password }}"
-          datacenter: "{{ vcenter_datacenter }}"
-          defaultDatastore: "/Datacenter/datastore/{{ vcenter_datastore }}"
-          folder: "{{ vmfolder }}"
-          diskType: thin
+          vcenters:
+            - server: "{{ vcenter_hostname }}"
+              user: "{{ vcenter_username }}"
+              password: "{{ vcenter_password }}"
+              datacenters:
+                - "{{ vcenter_datacenter }}"
+          failureDomains:
+            - name: "fd1"
+              region: "default"
+              zone: "default"
+              server: "{{ vcenter_hostname }}"
+              topology:
+                datacenter: "{{ vcenter_datacenter }}"
+                computeCluster: "/{{ vcenter_datacenter }}/host/{{ vcenter_cluster }}"          
+                networks:
+                  - "{{ vcenter_network }}"                                      # 실제로 교체
+                datastore: "/{{ vcenter_datacenter }}/datastore/{{ vcenter_datastore }}"         
+                folder: "{{ vmfolder }}"                
+          defaultMachinePlatform:
+            osDisk:
+              diskSizeGB: 120
+            coresPerSocket: 1
+            cpus: 4
+            memoryMB: 16384
       fips: false
-      pullSecret: '{{ PullSecret }}'
+      pullSecret:  '{{ PullSecret }}'
       sshKey: "{{ ssh_pubkey }}"
 
 ### manafests Create & modify ###
@@ -138,4 +155,7 @@
   shell: mv /root/install_dir/worker.ign /var/www/html/
 
 - name: change perm and owner
-  shell : chmod 755 /var/www/html/worker.ign ; chown apache.apache /var/www/html/worker.ign
+  shell: chmod 755 /var/www/html/worker.ign ; chown apache.apache /var/www/html/worker.ign
+
+- name: selinux change 
+  shell:  chcon -R -h -t httpd_sys_content_t /var/www/html/
