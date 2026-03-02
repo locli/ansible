@@ -20,8 +20,24 @@
     GOVC_USERNAME: "{{ vcenter_username }}"
     GOVC_PASSWORD: "{{ vcenter_password }}"
     GOVC_INSECURE: "1"
+- name: get vm devices
+  command: govc device.ls -vm "{{ vm_name|upper}}"
+  register: vm_devices
+  changed_when: false
+  environment:
+    GOVC_URL: "{{ vcenter_hostname }}"
+    GOVC_USERNAME: "{{ vcenter_username }}"
+    GOVC_PASSWORD: "{{ vcenter_password }}"
+    GOVC_INSECURE: "1"
 - name: change sdrom connected
-  shell: govc device.connect -vm "{{ vm_name|upper}}" cdrom-16000
+  command:
+    argv:
+      - govc
+      - device.connect
+      - -vm
+      - "{{ vm_name|upper}}"
+      - "{{ ((vm_devices.stdout_lines | select('match', '^cdrom-') | list | first).split()[0]) }}"
+  when: (vm_devices.stdout_lines | select('match', '^cdrom-') | list | length) > 0
   environment:
     GOVC_URL: "{{ vcenter_hostname }}"
     GOVC_USERNAME: "{{ vcenter_username }}"
