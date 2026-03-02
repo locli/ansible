@@ -1,4 +1,11 @@
 ---
+- name: Get vCenter info
+  command: govc about
+  environment:
+    GOVC_URL: "{{ vcenter_hostname }}"
+    GOVC_USERNAME: "{{ vcenter_username }}"
+    GOVC_PASSWORD: "{{ vcenter_password }}"
+    GOVC_INSECURE: "1"
 - name: change macaddress for ip
   shell: govc vm.network.change -vm="{{ vm_name|upper}}" -net="{{vcenter_network}}" -net.address="{{macaddress}}" ethernet-0
 - name: change macaddress for ip
