@@ -1,0 +1,36 @@
+﻿---
+- name: Approve pending CSR requests until empty
+  when: ocp_auto_approve_csr | bool
+  ansible.builtin.shell: |
+    export KUBECONFIG={{ ocp_kubeconfig }}
+    pending="$(oc get csr --no-headers 2>/dev/null | awk '$5 == "Pending" {print $1}')"
+    if [ -n "$pending" ]; then
+      echo "$pending" | xargs -r oc adm certificate approve
+    fi
+    oc get csr --no-headers 2>/dev/null | awk '$5 == "Pending" {c++} END {print c+0}'
+  args:
+    executable: /bin/bash
+  register: csr_pending_count
+  retries: "{{ ocp_csr_retry_count }}"
+  delay: "{{ ocp_csr_retry_delay }}"
+  until: (csr_pending_count.stdout | trim | int) == 0
+  changed_when: (csr_pending_count.stdout | trim | int) > 0
+
+- name: Wait for install-complete
+  ansible.builtin.command: >-
+    openshift-install wait-for install-complete
+    --dir {{ ocp_install_dir }}
+    --log-level={{ ocp_wait_log_level }}
+  changed_when: false
+
+- name: Show cluster operators
+  ansible.builtin.command: oc get co
+  environment:
+    KUBECONFIG: "{{ ocp_kubeconfig }}"
+  changed_when: false
+
+- name: Show cluster nodes
+  ansible.builtin.command: oc get nodes -o wide
+  environment:
+    KUBECONFIG: "{{ ocp_kubeconfig }}"
+  changed_when: false

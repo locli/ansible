@@ -1,26 +1,22 @@
 ﻿---
-- name: Power On VM after clone
+- name: Power on all masters
   community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ vcenter_datacenter }}"
-    name: "{{ vm_name }}"
+    name: "{{ hostvars[item].vm_name | default(item) }}"
     state: poweredon
-  delegate_to: localhost
+  loop: "{{ groups['master'] }}"
 
-- name: Get VM info
+- name: Power on all workers
   community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ vcenter_datacenter }}"
-    name: "{{ vm_name }}"
-  register: vm_info
-  delegate_to: localhost
-
-- name: Show result
-  debug:
-    msg: "VM {{ vm_name }} power state is {{ vm_info.instance.hw_power_status }}"
+    name: "{{ hostvars[item].vm_name | default(item) }}"
+    state: poweredon
+  loop: "{{ groups['worker'] }}"

@@ -1,0 +1,8 @@
+﻿---
+ocp_deploy_stage: ""
+ocp_install_dir: "/root/install_dir"
+ocp_kubeconfig: "{{ ocp_install_dir }}/auth/kubeconfig"
+ocp_wait_log_level: "info"
+ocp_auto_approve_csr: true
+ocp_csr_retry_count: 30
+ocp_csr_retry_delay: 20

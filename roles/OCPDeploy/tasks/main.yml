@@ -1,0 +1,20 @@
+﻿---
+- name: Run prepare_ignition stage
+  ansible.builtin.import_tasks: prepare_ignition.yml
+  when: ocp_deploy_stage == "prepare_ignition"
+
+- name: Run vmware_bootstrap stage
+  ansible.builtin.import_tasks: vmware_bootstrap.yml
+  when: ocp_deploy_stage == "vmware_bootstrap"
+
+- name: Run wait_bootstrap stage
+  ansible.builtin.import_tasks: wait_bootstrap.yml
+  when: ocp_deploy_stage == "wait_bootstrap"
+
+- name: Run power_on_nodes stage
+  ansible.builtin.import_tasks: power_on_nodes.yml
+  when: ocp_deploy_stage == "power_on_nodes"
+
+- name: Run finalize_install stage
+  ansible.builtin.import_tasks: finalize_install.yml
+  when: ocp_deploy_stage == "finalize_install"

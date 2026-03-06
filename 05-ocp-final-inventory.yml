@@ -1,0 +1,47 @@
+﻿---
+all:
+  vars:
+    vcenter_hostname: "192.168.40.201"
+    vcenter_username: "administrator@vsphere.local"
+    vcenter_password: "!Vbcjwps1!"
+    vcenter_datacenter: "Datacenter"
+
+    ansible_user: "root"
+    ansible_password: "dlfmsdkcla"
+    ansible_become: true
+
+    ocp_install_dir: "/root/install_dir"
+    ocp_kubeconfig: "/root/install_dir/auth/kubeconfig"
+    ocp_wait_log_level: "info"
+    ocp_auto_approve_csr: true
+    ocp_csr_retry_count: 30
+    ocp_csr_retry_delay: 20
+
+  children:
+    bastion:
+      hosts:
+        192.168.41.220:
+          ansible_host: "192.168.41.220"
+
+    bootstrap:
+      hosts:
+        192.168.41.227:
+          vm_name: "A-bootstrap"
+
+    master:
+      hosts:
+        192.168.41.221:
+          vm_name: "A-master0"
+        192.168.41.222:
+          vm_name: "A-master1"
+        192.168.41.223:
+          vm_name: "A-master2"
+
+    worker:
+      hosts:
+        192.168.41.224:
+          vm_name: "A-worker0"
+        192.168.41.225:
+          vm_name: "A-worker1"
+        192.168.41.226:
+          vm_name: "A-worker2"

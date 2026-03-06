@@ -1,0 +1,63 @@
+﻿---
+- name: Validate required inventory groups
+  ansible.builtin.assert:
+    that:
+      - groups['bastion'] | default([]) | length > 0
+      - groups['bootstrap'] | default([]) | length > 0
+      - groups['master'] | default([]) | length > 0
+      - groups['worker'] | default([]) | length > 0
+    fail_msg: "Inventory must include bastion/bootstrap/master/worker groups"
+
+- name: Set vmware orchestration facts
+  ansible.builtin.set_fact:
+    bastion_host: "{{ groups['bastion'][0] }}"
+    ocp_vm_targets: "{{ (groups['bootstrap'] | default([])) + (groups['master'] | default([])) + (groups['worker'] | default([])) }}"
+
+- name: Power off all OCP VMs before extraConfig update
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ vcenter_datacenter }}"
+    name: "{{ hostvars[item].vm_name | default(item) }}"
+    state: poweredoff
+  loop: "{{ ocp_vm_targets }}"
+
+- name: Inject ignition guestinfo and UUID option
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ vcenter_datacenter }}"
+    name: "{{ hostvars[item].vm_name | default(item) }}"
+    state: present
+    advanced_settings:
+      - key: guestinfo.ignition.config.data
+        value: >-
+          {{
+            hostvars[bastion_host].bootstrap_ign_b64
+            if item in (groups['bootstrap'] | default([]))
+            else (
+              hostvars[bastion_host].master_ign_b64
+              if item in (groups['master'] | default([]))
+              else hostvars[bastion_host].worker_ign_b64
+            )
+          }}
+      - key: guestinfo.ignition.config.data.encoding
+        value: base64
+      - key: disk.EnableUUID
+        value: "TRUE"
+  loop: "{{ ocp_vm_targets }}"
+
+- name: Power on bootstrap VM
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ vcenter_datacenter }}"
+    name: "{{ hostvars[item].vm_name | default(item) }}"
+    state: poweredon
+  loop: "{{ groups['bootstrap'] }}"

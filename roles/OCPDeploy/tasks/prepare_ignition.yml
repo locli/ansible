@@ -1,0 +1,31 @@
+﻿---
+- name: Verify ignition files exist
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  loop:
+    - /var/www/html/bootstrap.ign
+    - /var/www/html/master.ign
+    - /var/www/html/worker.ign
+  register: ignition_stat
+
+- name: Fail when ignition file is missing
+  ansible.builtin.assert:
+    that:
+      - item.stat.exists
+    fail_msg: "Ignition file missing: {{ item.stat.path }}"
+  loop: "{{ ignition_stat.results }}"
+
+- name: Read ignition files
+  ansible.builtin.slurp:
+    src: "{{ item }}"
+  loop:
+    - /var/www/html/bootstrap.ign
+    - /var/www/html/master.ign
+    - /var/www/html/worker.ign
+  register: ignition_raw
+
+- name: Export base64 ignition facts
+  ansible.builtin.set_fact:
+    bootstrap_ign_b64: "{{ ignition_raw.results[0].content | regex_replace('\\s+', '') }}"
+    master_ign_b64: "{{ ignition_raw.results[1].content | regex_replace('\\s+', '') }}"
+    worker_ign_b64: "{{ ignition_raw.results[2].content | regex_replace('\\s+', '') }}"

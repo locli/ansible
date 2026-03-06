@@ -1,0 +1,45 @@
+﻿---
+- name: Prepare ignition payloads on bastion
+  hosts: bastion
+  gather_facts: false
+  become: true
+  roles:
+    - role: OCPDeploy
+      vars:
+        ocp_deploy_stage: prepare_ignition
+
+- name: Apply VMware extraConfig and boot bootstrap first
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles:
+    - role: OCPDeploy
+      vars:
+        ocp_deploy_stage: vmware_bootstrap
+
+- name: Wait bootstrap complete from bastion
+  hosts: bastion
+  gather_facts: false
+  become: true
+  roles:
+    - role: OCPDeploy
+      vars:
+        ocp_deploy_stage: wait_bootstrap
+
+- name: Power on master then worker VMs
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles:
+    - role: OCPDeploy
+      vars:
+        ocp_deploy_stage: power_on_nodes
+
+- name: Finalize cluster installation
+  hosts: bastion
+  gather_facts: false
+  become: true
+  roles:
+    - role: OCPDeploy
+      vars:
+        ocp_deploy_stage: finalize_install
